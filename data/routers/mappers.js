@@ -3,6 +3,7 @@ module.exports = {
   booleanToint,
   projectToBody,
   actionToBody,
+  contextToBody
 };
 
 function intToBoolean(int) {
@@ -23,6 +24,20 @@ function projectToBody(project) {
     result.actions = project.actions.map(action => ({
       ...action,
       completed: intToBoolean(action.completed),
+    }));
+  }
+
+  return result;
+}
+
+function contextToBody(project) {
+  const result = {
+    ...context,
+  };
+
+  if (action.contexts) {
+    result.contexts = action.contexts.map(context => ({
+      ...context,
     }));
   }
 
