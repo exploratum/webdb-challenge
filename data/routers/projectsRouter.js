@@ -54,7 +54,7 @@ router.put('/:id', validateBodyInfo, async (req,res) => {
 
     try {
         count = await projectsModel.update(req.params.id, req.body);
-        res.status(200).json({count: `${count} project(s) updated`});
+        res.status(200).json({count: `${count} record(s) updated`});
     }
     catch {
         res.status(500).json({"errorMessage": "That was a problem updating the record(s)"})
