@@ -3,16 +3,16 @@ const knexConfig = require('../../knexfile');
 const db = knex(knexConfig.development);
 
 
-function get(id) {
-    let query = db('actions');
+// function get(id) {
+//     let query = db('actions');
   
-    if (id) {
-      return query.where('actions.id', id).first();
-    }
-    else {
-        return query;
-    }
-  }
+//     if (id) {
+//       return query.where('actions.id', id).first();
+//     }
+//     else {
+//         return query;
+//     }
+//   }
 
 // function get(id) {
 //     let query = db('actions as a');
@@ -20,7 +20,7 @@ function get(id) {
 //     if (id) {
 //       query.where('a.id', id).first();
   
-//       const promises = [query, this.getActionContexts(id)]; // [ projects, actions ]
+//       const promises = [query, this.getActionContexts(id)]; // [ action, contexts ]
   
 //       return Promise.all(promises).then(function(results) {
 //         let [action, contexts] = results;
@@ -40,6 +40,23 @@ function get(id) {
 //     });
 //   }
 
+async function get(id) {
+
+  if (id) {
+    let action = await db('actions').where('actions.id', id).first();
+    let contexts = await db.select('contexts.id', 'contexts.name')
+      .from('action_contexts')
+      .leftJoin('contexts', 'contexts.id', 'action_contexts.context_id' )
+      .where('action_contexts.action_id', id )
+
+    action.contexts = contexts;
+    return action;
+  }
+  else {
+    return db('actions');
+  }
+}
+
   function getActionContexts(actionId) {
     return db('contexts')
       .where('action_id', actionId)
@@ -47,7 +64,6 @@ function get(id) {
   }
 
 function add(action) {
-    console.log('trying adding in model')
     return db('actions').insert(action);
 }
 
