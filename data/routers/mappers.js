@@ -30,7 +30,7 @@ function projectToBody(project) {
   return result;
 }
 
-function contextToBody(project) {
+function contextToBody(context) {
   const result = {
     ...context,
   };
